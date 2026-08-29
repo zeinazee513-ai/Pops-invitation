@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zee's Birthday Party</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F8F4EA;
+    --cream-2:#F1EADA;
+    --pink:#E39AAD;
+    --pink-deep:#CC5F80;
+    --pink-pale:#F3D3DB;
+    --green:#3D5843;
+    --green-soft:#6F8F73;
+    --ink:#4A4740;
+    --paper-shadow: 0 24px 60px -20px rgba(61,88,67,0.35);
+  }
+
+  *{box-sizing:border-box;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  html,body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 10%, #FBF8F1 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #FBF8F1 0%, transparent 45%),
+      var(--cream);
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:28px 14px;
+  }
+
+  .card{
+    position:relative;
+    width:100%;
+    max-width:400px;
+    background:var(--cream);
+    border-radius:22px;
+    box-shadow:var(--paper-shadow);
+    border:1px solid #ECE3CE;
+    overflow:hidden;
+    padding:6px;
+  }
+
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border:1px solid #E4D9BE;
+    border-radius:16px;
+    pointer-events:none;
+  }
+
+  .inner{
+    position:relative;
+    padding:34px 30px 30px;
+  }
+
+  /* --- ribbon signature element --- */
+  .ribbon-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:6px;
+  }
+  .ribbon-wrap.bottom{ margin-top:8px; margin-bottom:0; transform:scaleY(-1); }
+
+  .ribbon-path{
+    fill:none;
+    stroke:var(--pink);
+    stroke-width:5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:900;
+    stroke-dashoffset:900;
+    animation:draw 1.6s ease-out forwards;
+  }
+  @keyframes draw{ to { stroke-dashoffset:0; } }
+
+  /* --- screens --- */
+  .screen{ text-align:center; }
+  .screen.hidden{ display:none !important; }
+
+  #screen-invite{
+    min-height:460px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+  }
+  #screen-details{ min-height:460px; }
+
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:3.2px;
+    font-weight:700;
+    color:var(--green-soft);
+    text-transform:uppercase;
+    margin:0 0 2px;
+    opacity:0;
+    animation:fadeUp .7s ease .25s forwards;
+  }
+
+  .title-name{
+    font-family:'Dancing Script', cursive;
+    font-weight:700;
+    font-size:38px;
+    color:var(--green);
+    margin:34px 0 -6px;
+    opacity:0;
+    animation:fadeUp .7s ease .4s forwards;
+  }
+  .title-main{
+    font-family:'Dancing Script', cursive;
+    font-weight:700;
+    font-size:40px;
+    color:var(--green);
+    margin:0 0 6px;
+    opacity:0;
+    animation:fadeUp .7s ease .55s forwards;
+  }
+
+  .doodle-row{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:18px 0 12px;
+    opacity:0;
+    animation:fadeUp .7s ease .7s forwards;
+  }
+
+  .spark{
+    position:absolute;
+    color:var(--pink);
+  }
+  .spark.green{ color:var(--green-soft); }
+
+  .date-line{
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:1.2px;
+    color:var(--pink-deep);
+    margin:10px 0 4px;
+    text-transform:uppercase;
+    opacity:0;
+    animation:fadeUp .7s ease .85s forwards;
+  }
+
+  .place-line{
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:1px;
+    color:var(--green);
+    text-transform:uppercase;
+    opacity:0;
+    animation:fadeUp .7s ease .95s forwards;
+    margin-bottom:22px;
+  }
+
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--pink-deep);
+    color:#fff;
+    border:none;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:13px 26px;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 10px 24px -8px rgba(204,95,128,0.55);
+    transition:transform .18s ease, box-shadow .18s ease;
+    opacity:0;
+    animation:fadeUp .7s ease 1.1s forwards;
+  }
+  .cta-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px -8px rgba(204,95,128,0.6); }
+  .cta-btn:focus-visible{ outline:3px solid var(--green-soft); outline-offset:3px; }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  /* --- details screen --- */
+  .details-header{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:36px;
+    margin-bottom:14px;
+  }
+
+  .back-link{
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    color:var(--green-soft);
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:20px;
+    line-height:1;
+    cursor:pointer;
+    padding:4px 8px 4px 0;
+  }
+  .back-link:hover{ color:var(--green); }
+
+  .greeting{
+    font-family:'Dancing Script', cursive;
+    font-weight:700;
+    font-size:32px;
+    color:var(--green);
+    margin:0;
+  }
+
+  .details-sub{
+    font-size:13px;
+    color:var(--green-soft);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-weight:700;
+    text-align:left;
+    margin:14px 0 16px;
+  }
+
+  .details-body{
+    text-align:left;
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink);
+  }
+  .details-body p{ margin:0 0 14px; }
+  .details-body a{
+    color:var(--pink-deep);
+    font-weight:700;
+    text-decoration:none;
+    border-bottom:2px solid var(--pink-pale);
+  }
+  .details-body a:hover{ border-color:var(--pink-deep); }
+
+  .menu-link{
+    display:inline-block;
+    font-weight:700;
+    color:var(--pink-deep);
+    background:var(--pink-pale);
+    padding:8px 18px;
+    border-radius:999px;
+    text-decoration:none;
+    border-bottom:none !important;
+  }
+  .menu-link:hover{ background:#EFC0CB; }
+
+  .note-box{
+    background:var(--cream-2);
+    border:1px dashed #DCC9A6;
+    border-radius:14px;
+    padding:12px 16px;
+    font-size:13.5px;
+    color:var(--green);
+    margin:10px 0 18px;
+  }
+
+  .rsvp-row{
+    display:flex;
+    gap:12px;
+    margin:20px 0 6px;
+  }
+  .rsvp-btn{
+    flex:1;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    padding:13px 8px;
+    border-radius:14px;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  .rsvp-btn:focus-visible{ outline:3px solid var(--green-soft); outline-offset:2px; }
+  .rsvp-btn.yes{
+    background:var(--pink-deep);
+    color:#fff;
+    border:none;
+    box-shadow:0 10px 22px -10px rgba(204,95,128,0.6);
+  }
+  .rsvp-btn.no{
+    background:transparent;
+    color:var(--green);
+    border:2px solid var(--green-soft);
+  }
+  .rsvp-btn:hover{ transform:translateY(-2px); }
+  .rsvp-btn:disabled{ opacity:0.55; cursor:default; transform:none; }
+
+  .rsvp-status{
+    text-align:center;
+    font-weight:700;
+    color:var(--green);
+    min-height:20px;
+    margin-top:8px;
+    font-size:14px;
+  }
+
+  .signoff{
+    text-align:center;
+    font-family:'Dancing Script', cursive;
+    font-size:18px;
+    color:var(--pink-deep);
+    margin-top:8px;
+  }
+
+  /* host view — only ever shown outside the invite card, and only with ?host=1 */
+  .host-view{
+    max-width:460px;
+    width:100%;
+    margin-top:22px;
+    padding:18px 20px;
+    background:#fff;
+    border:1px dashed #DCC9A6;
+    border-radius:16px;
+    text-align:left;
+  }
+  .host-view h3{
+    font-size:13px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--green-soft);
+    margin:0 0 10px;
+  }
+  .host-list{ font-size:14px; line-height:1.8; }
+  .host-list .yes{ color:var(--pink-deep); font-weight:700; }
+  .host-list .no{ color:var(--green-soft); }
+</style>
+</head>
+<body>
+
+<div style="display:flex; flex-direction:column; align-items:center; width:100%;">
+
+<div class="card">
+  <div class="inner">
+
+    <!-- INVITE SCREEN -->
+    <section id="screen-invite" class="screen">
+      <p class="eyebrow">You're invited to</p>
+      <h1 class="title-name">Zee's</h1>
+      <h1 class="title-main">Birthday Party</h1>
+
+      <div class="doodle-row">
+        <svg class="spark" style="left:8%; top:6px;" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0l2 10 10 2-10 2-2 10-2-10L0 12l10-2z"/></svg>
+        <svg class="spark green" style="right:10%; top:0px;" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0l2 10 10 2-10 2-2 10-2-10L0 12l10-2z"/></svg>
+        <svg width="150" height="130" viewBox="0 0 150 130" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <!-- candles -->
+          <line x1="55" y1="20" x2="53" y2="46"/>
+          <line x1="75" y1="12" x2="75" y2="46"/>
+          <line x1="95" y1="20" x2="96" y2="46"/>
+          <path d="M53,20 C48,14 50,10 53,8 C56,10 58,14 53,20 Z"/>
+          <path d="M75,12 C70,6 72,2 75,0 C78,2 80,6 75,12 Z"/>
+          <path d="M96,20 C91,14 93,10 96,8 C99,10 101,14 96,20 Z"/>
+          <!-- cake top -->
+          <ellipse cx="75" cy="50" rx="46" ry="10"/>
+          <!-- cake body -->
+          <path d="M29,50 C29,72 29,86 29,86 C29,96 121,96 121,86 C121,86 121,72 121,50"/>
+          <path d="M29,86 C40,92 50,80 60,86 C70,92 80,80 90,86 C100,92 110,80 121,86"/>
+        </svg>
+      </div>
+
+      <p class="date-line" id="party-date">Friday, Sep 11, 2026</p>
+      <p class="place-line">Mawja &nbsp;·&nbsp; Sheikh Zayed</p>
+
+      <button class="cta-btn" id="go-details">Click here for the details →</button>
+
+    </section>
+
+    <!-- DETAILS SCREEN -->
+    <section id="screen-details" class="screen hidden">
+      <div class="details-header">
+        <button class="back-link" id="go-invite" aria-label="Back to invitation">&larr;</button>
+        <p class="greeting">Hello Pops</p>
+      </div>
+      <p class="details-sub">The Details</p>
+
+      <div class="details-body">
+        <p>I'd love to invite you to my birthday gathering at <strong>Mawja, Sheikh Zayed</strong>, at <strong>7 PM</strong>! 🎂✨</p>
+        <p>📍 <a href="https://tr.ee/NLiD921dMN" target="_blank" rel="noopener">Get the location</a></p>
+        <p>There's a <strong>250 EGP minimum</strong> per person. You can either pay for your own order, or combine your 250 EGP with someone else's in one shared order. 🤍</p>
+        <p>Click here if you are curious about the menu 👀</p>
+        <p><a class="menu-link" href="https://tr.ee/htfBD7b6Ls" target="_blank" rel="noopener">View the Menu</a></p>
+        <div class="note-box">If you're sure you're coming, tap a button below by <strong>next Friday or Saturday</strong> so I can finalize the reservation. 🫶🏻</div>
+      </div>
+
+      <div class="rsvp-row">
+        <button class="rsvp-btn yes" id="rsvp-yes">I'm Coming</button>
+        <button class="rsvp-btn no" id="rsvp-no">I Can't Make It</button>
+      </div>
+      <p class="rsvp-status" id="rsvp-status"></p>
+
+      <p class="signoff">Can't wait to celebrate with you, see you there.</p>
+    </section>
+
+  </div>
+</div>
+
+<div class="host-view hidden" id="host-view">
+  <h3>Your private RSVP tracker</h3>
+  <div class="host-list" id="host-list">Loading…</div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const nameParam = params.get('name');
+  const isHost = params.get('host') === '1';
+
+  document.getElementById('go-details').addEventListener('click', function(){
+    document.getElementById('screen-invite').classList.add('hidden');
+    document.getElementById('screen-details').classList.remove('hidden');
+  });
+  document.getElementById('go-invite').addEventListener('click', function(){
+    document.getElementById('screen-details').classList.add('hidden');
+    document.getElementById('screen-invite').classList.remove('hidden');
+  });
+
+  const statusEl = document.getElementById('rsvp-status');
+  const yesBtn = document.getElementById('rsvp-yes');
+  const noBtn = document.getElementById('rsvp-no');
+
+  // 1. Sign up free at https://formspree.io and verify zeinazee513@gmail.com as the receiving address.
+  // 2. Create a form there, copy its endpoint (looks like https://formspree.io/f/xxxxxxxx).
+  // 3. Paste it below, replacing YOUR_FORM_ID. That's the only edit needed to receive RSVPs automatically.
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/myeyzynb';
+
+  async function recordRsvp(status){
+    const guest = nameParam || 'Pops';
+    yesBtn.disabled = true;
+    noBtn.disabled = true;
+
+    const label = status === 'yes' ? "I'm Coming" : "I'm Not Coming";
+
+    try{
+      if(window.storage && typeof window.storage.set === 'function'){
+        const key = 'rsvp:' + guest.toLowerCase().replace(/[^a-z0-9]/g,'-') + '-' + Date.now();
+        await window.storage.set(key, JSON.stringify({ name: guest, status: status, ts: Date.now() }), true);
+      }
+    }catch(e){
+      console.error('Could not save RSVP', e);
+    }
+
+    try{
+      await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          'Guest Name': guest,
+          'RSVP': label,
+          '_subject': 'RSVP: ' + guest + ' Pops ' + label
+        })
+      });
+    }catch(e){
+      console.error('Could not send RSVP email automatically', e);
+    }
+
+    statusEl.textContent = status === 'yes'
+      ? "Thanks, " + guest + "! See you there."
+      : "Thanks for letting us know, " + guest + ".";
+  }
+
+  yesBtn.addEventListener('click', function(){ recordRsvp('yes'); });
+  noBtn.addEventListener('click', function(){ recordRsvp('no'); });
+
+  if(isHost){
+    const panel = document.getElementById('host-view');
+    panel.classList.remove('hidden');
+    const listEl = document.getElementById('host-list');
+
+    (async function loadRsvps(){
+      try{
+        if(!window.storage || typeof window.storage.list !== 'function'){
+          listEl.textContent = 'RSVP storage is not available in this view.';
+          return;
+        }
+        const result = await window.storage.list('rsvp:', true);
+        const keys = (result && result.keys) || [];
+        if(keys.length === 0){
+          listEl.textContent = 'No responses yet.';
+          return;
+        }
+        const entries = [];
+        for(const k of keys){
+          try{
+            const rec = await window.storage.get(k, true);
+            if(rec && rec.value){
+              entries.push(JSON.parse(rec.value));
+            }
+          }catch(e){ /* skip missing key */ }
+        }
+        entries.sort((a,b)=> (a.ts||0) - (b.ts||0));
+        listEl.innerHTML = entries.map(function(e){
+          const cls = e.status === 'yes' ? 'yes' : 'no';
+          const label = e.status === 'yes' ? "I'm Coming" : "I'm Not Coming";
+          return '<div>' + e.name + ' — <span class="'+cls+'">'+label+'</span></div>';
+        }).join('');
+      }catch(e){
+        listEl.textContent = 'Could not load RSVPs right now.';
+      }
+    })();
+  }
+})();
+</script>
+
+</body>
+</html>
